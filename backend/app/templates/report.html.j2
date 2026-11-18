@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Library Contents Claim — {{ packet.sweep.id }}</title>
+<style>
+:root { color-scheme: light dark; --fg:#111; --muted:#555; --bg:#fff; --card:#f6f6f6; --line:#e2e2e2; --warn:#b85a00; --bad:#a0001a; --good:#1d6b2a; }
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ --fg:#eee; --muted:#aaa; --bg:#111; --card:#1a1a1a; --line:#2a2a2a; }}
+body { font: 14px/1.5 system-ui, -apple-system, sans-serif; margin: 0; background: var(--bg); color: var(--fg); }
+.wrap { max-width: 980px; margin: 0 auto; padding: 24px 16px 64px; }
+h1 { font-size: 22px; margin: 0 0 4px; }
+h2 { font-size: 16px; margin: 32px 0 12px; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+.meta { color: var(--muted); font-size: 13px; }
+.grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 12px; }
+.tile { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 12px; }
+.tile .k { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .04em; }
+.tile .v { font-size: 20px; font-weight: 600; margin-top: 2px; }
+table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 13px; }
+th, td { border-bottom: 1px solid var(--line); padding: 6px 8px; text-align: left; vertical-align: top; }
+th { background: var(--card); font-weight: 600; }
+.status-identified { color: var(--good); }
+.status-unidentified { color: var(--muted); }
+.status-needs_appraisal { color: var(--warn); font-weight: 600; }
+.status-priced { color: var(--good); }
+.status-range { color: var(--fg); }
+.src a { color: inherit; }
+.src .date { color: var(--muted); font-size: 11px; }
+.review td { background: #fff3e0; }
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .review td { background: #3a2a10; } }
+.foot { color: var(--muted); font-size: 12px; margin-top: 40px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Library Contents Claim Packet</h1>
+  <div class="meta">
+    Sweep <code>{{ packet.sweep.id }}</code> ·
+    Captured {{ packet.sweep.captured_at }} ·
+    {{ packet.sweep.country }} / {{ packet.sweep.currency }} ·
+    Device {{ packet.sweep.device }} ·
+    Duration {{ "%.1f"|format(packet.sweep.duration_s) }}s
+  </div>
+
+  <h2>Totals</h2>
+  <div class="grid">
+    <div class="tile"><div class="k">Books (count)</div><div class="v">{{ packet.totals.book_count }}</div></div>
+    <div class="tile"><div class="k">Identified</div><div class="v">{{ packet.totals.books_identified }}</div></div>
+    <div class="tile"><div class="k">Unidentified</div><div class="v">{{ packet.totals.books_unidentified }}</div></div>
+    <div class="tile"><div class="k">Shelf run</div><div class="v">{{ "%.2f"|format(packet.totals.shelf_run_m) }} m</div></div>
+    <div class="tile"><div class="k">Books replacement</div><div class="v">{{ packet.sweep.currency }} {{ "%.2f"|format(packet.totals.books_replacement_cost) }}</div></div>
+    <div class="tile"><div class="k">Books used value</div><div class="v">{{ packet.sweep.currency }} {{ "%.2f"|format(packet.totals.books_used_value) }}</div></div>
+    <div class="tile"><div class="k">Items replacement</div><div class="v">{{ packet.sweep.currency }} {{ "%.0f"|format(packet.totals.items_replacement_cost_low) }}–{{ "%.0f"|format(packet.totals.items_replacement_cost_high) }}</div></div>
+    <div class="tile"><div class="k">Excluded (review)</div><div class="v">{{ packet.totals.excluded_from_totals }}</div></div>
+  </div>
+
+  <h2>Room</h2>
+  <div class="grid">
+    <div class="tile"><div class="k">Length × Width × Height</div><div class="v">{{ "%.2f"|format(packet.room.length_m) }} × {{ "%.2f"|format(packet.room.width_m) }} × {{ "%.2f"|format(packet.room.height_m) }} m</div></div>
+    <div class="tile"><div class="k">Floor area</div><div class="v">{{ "%.2f"|format(packet.room.floor_area_m2) }} m² ({{ "%.1f"|format(packet.room.floor_area_m2 * 10.7639) }} ft²)</div></div>
+    <div class="tile"><div class="k">Wall area</div><div class="v">{{ "%.2f"|format(packet.room.wall_area_m2) }} m² ({{ "%.1f"|format(packet.room.wall_area_m2 * 10.7639) }} ft²)</div></div>
+    <div class="tile"><div class="k">Shelved wall</div><div class="v">{{ "%.2f"|format(packet.room.shelved_wall_area_m2) }} m²</div></div>
+  </div>
+  <div class="meta" style="margin-top:8px;">Scale method: {{ packet.room.scale_method or "—" }} · confidence {{ "%.2f"|format(packet.room.confidence) }}</div>
+
+  <h2>Books ({{ packet.books|length }})</h2>
+  <table>
+    <thead><tr>
+      <th>#</th><th>Title / Author</th><th>Edition / ISBN</th><th>Spine (h×t cm)</th><th>Status</th>
+      <th>Replacement</th><th>Used</th><th>Frame</th>
+    </tr></thead>
+    <tbody>
+    {% for b in packet.books %}
+      <tr>
+        <td>{{ loop.index }}</td>
+        <td>
+          {% if b.title %}<strong>{{ b.title }}</strong>{% else %}<em>unidentified</em>{% endif %}
+          {% if b.author %}<br/><span class="meta">{{ b.author }}</span>{% endif %}
+          {% if b.rare_flag_reason %}<br/><span class="status-needs_appraisal">{{ b.rare_flag_reason }}</span>{% endif %}
+        </td>
+        <td>{{ b.edition }}<br/><span class="meta">{{ b.isbn }}</span></td>
+        <td>{{ "%.1f"|format(b.spine_height_cm) }} × {{ "%.1f"|format(b.spine_thickness_cm) }}</td>
+        <td class="status-{{ b.status }}">{{ b.status }}<br/><span class="meta">conf {{ "%.2f"|format(b.id_confidence) }}</span></td>
+        <td class="src">
+          {% if b.replacement_cost %}
+            {{ packet.sweep.currency }} {{ "%.2f"|format(b.replacement_cost.amount) }}
+            <br/><a href="{{ b.replacement_cost.url }}" target="_blank">{{ b.replacement_cost.source }}</a>
+            <br/><span class="date">{{ b.replacement_cost.retrieved_at }}</span>
+          {% else %}—{% endif %}
+        </td>
+        <td class="src">
+          {% if b.used_value %}
+            {{ packet.sweep.currency }} {{ "%.2f"|format(b.used_value.amount) }}
+            <br/><a href="{{ b.used_value.url }}" target="_blank">{{ b.used_value.source }}</a>
+            <br/><span class="date">{{ b.used_value.retrieved_at }} · {{ b.used_value.condition_assumed }}</span>
+          {% else %}—{% endif %}
+        </td>
+        <td><code>{{ b.frame_ref }}</code></td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+
+  <h2>Non-book items ({{ packet.items|length }})</h2>
+  <table>
+    <thead><tr>
+      <th>#</th><th>Category</th><th>Description</th><th>Brand / Model</th>
+      <th>Dims (W×H×D cm)</th><th>Status</th><th>Replacement range</th><th>Frame</th>
+    </tr></thead>
+    <tbody>
+    {% for i in packet.items %}
+      <tr>
+        <td>{{ loop.index }}</td>
+        <td>{{ i.category }}</td>
+        <td>{{ i.description }}</td>
+        <td>{{ i.brand_model or "—" }}</td>
+        <td>{{ i.dimensions_cm.w }} × {{ i.dimensions_cm.h }} × {{ i.dimensions_cm.d }}</td>
+        <td class="status-{{ i.status }}">{{ i.status }}</td>
+        <td class="src">
+          {% if i.replacement_cost %}
+            {{ packet.sweep.currency }} {{ "%.0f"|format(i.replacement_cost.low) }}–{{ "%.0f"|format(i.replacement_cost.high) }}
+            <br/><a href="{{ i.replacement_cost.url }}" target="_blank">{{ i.replacement_cost.source }}</a>
+            <br/><span class="date">{{ i.replacement_cost.retrieved_at }}</span>
+          {% else %}—{% endif %}
+        </td>
+        <td><code>{{ i.frame_ref }}</code></td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+
+  <h2>Review queue ({{ packet.review_queue|length }})</h2>
+  <table class="review">
+    <thead><tr><th>#</th><th>Ref</th><th>Reason</th></tr></thead>
+    <tbody>
+    {% for r in packet.review_queue %}
+      <tr><td>{{ loop.index }}</td><td><code>{{ r.ref_id }}</code></td><td>{{ r.reason }}</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="foot">
+    Numbers are computed from source lines by the aggregator in <code>backend/app/services/packet.py</code>.
+    No totals are written by a language model. Each priced row carries a source URL and retrieval date.
+    Empty prices indicate the pipeline could not find a reliable source — these rows are excluded from totals.
+  </div>
+</div>
+</body>
+</html>

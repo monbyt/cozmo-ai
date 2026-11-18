@@ -1,0 +1,44 @@
+# Secrets
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Node / Expo
+node_modules/
+.expo/
+.expo-shared/
+dist/
+web-build/
+*.log
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+
+# Captured data (large, personal)
+backend/data/frames/*
+backend/data/sweeps/*
+!backend/data/frames/.gitkeep
+!backend/data/sweeps/.gitkeep
+backend/data/*.db
+backend/data/*.sqlite
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
