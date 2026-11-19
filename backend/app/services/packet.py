@@ -72,15 +72,23 @@ def build_packet(sweep_id: str) -> ClaimPacket:
         currency=sweep_row.get("currency") or "",
     )
 
+    floor_m2 = room_row.get("floor_area_m2") or 0
+    wall_m2 = room_row.get("wall_area_m2") or 0
     room = Room(
         length_m=room_row.get("length_m") or 0,
         width_m=room_row.get("width_m") or 0,
         height_m=room_row.get("height_m") or 0,
-        floor_area_m2=room_row.get("floor_area_m2") or 0,
-        wall_area_m2=room_row.get("wall_area_m2") or 0,
+        floor_area_m2=floor_m2,
+        wall_area_m2=wall_m2,
         shelved_wall_area_m2=room_row.get("shelved_wall_area_m2") or 0,
         scale_method=room_row.get("scale_method") or "",
         confidence=room_row.get("confidence") or 0,
+        floor_area_ft2=round(floor_m2 * 10.7639, 2) if floor_m2 else 0,
+        wall_area_ft2=round(wall_m2 * 10.7639, 2) if wall_m2 else 0,
+        shape_notes=(
+            "rectangular from largest floor plane + vertical wall planes"
+            if floor_m2 else "no ARKit planes — room geometry unknown"
+        ),
     )
 
     books: list[Book] = []

@@ -8,6 +8,10 @@ const BACKEND = 'http://127.0.0.1:8000';
 
 export default defineConfig({
   plugins: [react(), basicSsl()],
+  build: {
+    outDir: '../backend/static',
+    emptyOutDir: true,
+  },
   server: {
     host: true,
     port: 5173,

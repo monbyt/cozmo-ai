@@ -39,6 +39,21 @@ LOCALES: dict[str, dict[str, str]] = {
 
 RARE_SIGNAL_KEYWORDS = {"first edition", "1st edition", "signed", "limited", "numbered", "antiquarian", "rare"}
 
+# Digital / non-physical product markers — exclude from replacement cost.
+_DIGITAL_MARKERS = (
+    "ebook", "e-book", "kindle", "nook", "kobo", "audiobook", "audio book",
+    "digital", "pdf", "epub", "mp3", "download",
+)
+
+# Preferred physical retailers per locale (lowercased substrings). Soft preference only.
+_RETAILER_PREFER = {
+    "US": ("amazon", "barnes", "bookshop", "powell", "books-a-million", "walmart", "target"),
+    "GB": ("amazon", "waterstones", "blackwell", "whsmith", "bookshop", "foyles"),
+    "DE": ("amazon", "thalia", "hugendubel"),
+    "CA": ("amazon", "indigo", "chapters"),
+    "AU": ("amazon", "booktopia", "dymocks"),
+}
+
 
 @dataclass
 class PriceResult:
@@ -128,27 +143,58 @@ class PricingService:
             log.warning("serpapi shopping failed for %r: %s", query, e)
             return []
 
+    def _is_digital(self, r: dict[str, Any]) -> bool:
+        blob = " ".join([
+            str(r.get("title") or ""),
+            str(r.get("source") or ""),
+            str(r.get("snippet") or ""),
+            str(r.get("product_link") or ""),
+            str(r.get("link") or ""),
+        ]).lower()
+        return any(m in blob for m in _DIGITAL_MARKERS)
+
+    def _pick_physical(self, results: list[dict[str, Any]], country: str) -> tuple[float, str, str, str] | None:
+        """Median of top physical listings, preferring known retailers. Never returns digital."""
+        prefer = _RETAILER_PREFER.get(country.upper(), _RETAILER_PREFER["US"])
+        picks: list[tuple[float, str, str, str, int]] = []
+        for r in results[:12]:
+            if self._is_digital(r):
+                continue
+            price = _parse_price_string(
+                r.get("extracted_price") and str(r["extracted_price"]) or r.get("price", "")
+            )
+            url = r.get("product_link") or r.get("link", "")
+            source = r.get("source", "") or "google_shopping"
+            thumb = r.get("thumbnail") or r.get("thumb") or ""
+            if not price or not url:
+                continue
+            boost = 1 if any(p in source.lower() for p in prefer) else 0
+            picks.append((price, source, url, thumb, boost))
+        if not picks:
+            return None
+        # Prefer retailer-matched, then take median of up to 5 cheapest remaining.
+        picks.sort(key=lambda x: (-x[4], x[0]))
+        top = picks[:5]
+        top.sort(key=lambda x: x[0])
+        mid = top[len(top) // 2]
+        return mid[0], mid[1], mid[2], mid[3]
+
     async def price_book_new(self, title: str, author: str, isbn: str, country: str) -> PriceResult:
         if not (title or isbn):
             return PriceResult(0, "", "", now_iso(), self._locale(country)["currency"], error="no_query")
-        query = isbn or f"{title} {author}".strip()
+        # Prefer physical hardcover/paperback wording to push ebooks down.
+        base = isbn or f"{title} {author}".strip()
+        query = f"{base} hardcover paperback book"
         results = await self._serpapi_shopping(query, country)
+        if not results:
+            results = await self._serpapi_shopping(base, country)
         if not results:
             return PriceResult(0, "", "", now_iso(), self._locale(country)["currency"], error="no_results")
 
-        # Take the lowest sourced price with a URL — "new" default; condition "new"
-        picks = []
-        for r in results[:8]:
-            price = _parse_price_string(r.get("extracted_price") and str(r["extracted_price"]) or r.get("price", ""))
-            url = r.get("product_link") or r.get("link", "")
-            source = r.get("source", "")
-            thumb = r.get("thumbnail") or r.get("thumb") or ""
-            if price and url:
-                picks.append((price, source, url, thumb))
-        if not picks:
+        picked = self._pick_physical(results, country)
+        if not picked:
             return PriceResult(0, "", "", now_iso(), self._locale(country)["currency"], error="no_sourced_price")
-        picks.sort(key=lambda x: x[0])
-        price, source, url, thumb = picks[0]
+        price, source, url, thumb = picked
         return PriceResult(
             amount=price,
             source=source or "google_shopping",
@@ -161,22 +207,13 @@ class PricingService:
         )
 
     async def price_book_used(self, title: str, author: str, isbn: str, country: str) -> PriceResult:
-        # Use SerpAPI Google Shopping with "used" qualifier; AbeBooks/Bookfinder would be strictly better
-        # (left as an extension point). Condition assumed = "good".
-        query = (isbn or f"{title} {author}").strip() + " used"
+        # SerpAPI Google Shopping with "used" qualifier. Condition assumed = "good".
+        query = (isbn or f"{title} {author}").strip() + " used book"
         results = await self._serpapi_shopping(query, country)
-        picks = []
-        for r in results[:8]:
-            price = _parse_price_string(r.get("extracted_price") and str(r["extracted_price"]) or r.get("price", ""))
-            url = r.get("product_link") or r.get("link", "")
-            source = r.get("source", "")
-            thumb = r.get("thumbnail") or r.get("thumb") or ""
-            if price and url:
-                picks.append((price, source, url, thumb))
-        if not picks:
+        picked = self._pick_physical(results, country) if results else None
+        if not picked:
             return PriceResult(0, "", "", now_iso(), self._locale(country)["currency"], error="no_sourced_price")
-        picks.sort(key=lambda x: x[0])
-        price, source, url, thumb = picks[0]
+        price, source, url, thumb = picked
         return PriceResult(
             amount=price,
             source=source or "google_shopping_used",

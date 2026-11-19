@@ -18,13 +18,52 @@ from typing import Any
 
 log = logging.getLogger(__name__)
 
-# Typical print book formats (cm). Used as reference-object fallback.
+# Typical print book formats (cm). Acceptable scale sources per the brief:
+# LiDAR, reference object, known shelf dimensions, OR standard book formats.
 TYPICAL_HEIGHTS = {
     "hardcover_trade": 23.5,
     "paperback_mass": 17.5,
     "paperback_trade": 20.3,
     "coffee_table": 30.0,
+    "unknown": 21.0,
 }
+
+# Typical spine thickness by format (cm). Used when LiDAR/bbox depth is unavailable.
+TYPICAL_THICKNESS = {
+    "hardcover_trade": 2.8,
+    "paperback_mass": 1.8,
+    "paperback_trade": 2.2,
+    "coffee_table": 1.6,
+    "unknown": 2.0,
+}
+
+
+def format_spine_cm(format_hint: str) -> tuple[float, float, str]:
+    """Return (height_cm, thickness_cm, scale_method) from a standard format hint."""
+    hint = (format_hint or "unknown").strip().lower() or "unknown"
+    if hint not in TYPICAL_HEIGHTS:
+        hint = "unknown"
+    return TYPICAL_HEIGHTS[hint], TYPICAL_THICKNESS[hint], "standard_book_format"
+
+
+def shelved_wall_area_m2(items: list[dict], room_wall_area_m2: float = 0.0) -> float:
+    """Sum face area of shelving units. Prefer measured dims; else leave 0."""
+    total = 0.0
+    for it in items:
+        if (it.get("category") or "").lower() != "shelving":
+            continue
+        dims = it.get("dims") or {}
+        if isinstance(it.get("dims_json"), str):
+            try:
+                import json as _json
+                dims = _json.loads(it["dims_json"] or "{}")
+            except Exception:
+                dims = {}
+        w_cm = float(dims.get("w") or 0)
+        h_cm = float(dims.get("h") or 0)
+        if w_cm > 0 and h_cm > 0:
+            total += (w_cm / 100.0) * (h_cm / 100.0)
+    return round(total, 2)
 
 
 @dataclass

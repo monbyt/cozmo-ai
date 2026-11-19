@@ -22,6 +22,10 @@ class Room(BaseModel):
     shelved_wall_area_m2: float = 0
     scale_method: str = ""
     confidence: float = 0
+    # Extensions — brief asks for ft² in the report; also echoed here for adjusters.
+    floor_area_ft2: float = 0
+    wall_area_ft2: float = 0
+    shape_notes: str = ""
 
 
 class Price(BaseModel):

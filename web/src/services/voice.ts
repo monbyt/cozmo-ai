@@ -6,8 +6,11 @@ export class VoiceLoop {
   private rec: MediaRecorder | null = null;
   private chunks: BlobPart[] = [];
   private mediaStream: MediaStream | null = null;
+  private client: BackendClient;
 
-  constructor(private client: BackendClient) {}
+  constructor(client: BackendClient) {
+    this.client = client;
+  }
 
   async requestMic(): Promise<void> {
     if (this.mediaStream) return;

@@ -30,29 +30,24 @@ export type Screen = 'home' | 'sweep' | 'packet';
 
 export type State = {
   screen: Screen;
-  backendUrl: string;
   country: string;
   currency: string;
-  heightCm: number;
-  // sweep
   sweepId: string | null;
   books: BookEntry[];
   items: ItemEntry[];
   captureNotes: string[];
   agentUtterance: string;
   revisitHint: string;
-  // packet
   packetJsonUrl: string | null;
   packetHtmlUrl: string | null;
+  summary: Record<string, unknown> | null;
 };
 
 const listeners = new Set<() => void>();
 let state: State = {
   screen: 'home',
-  backendUrl: pickDefaultBackend(),
   country: 'US',
   currency: 'USD',
-  heightCm: 175,
   sweepId: null,
   books: [],
   items: [],
@@ -61,6 +56,7 @@ let state: State = {
   revisitHint: '',
   packetJsonUrl: null,
   packetHtmlUrl: null,
+  summary: null,
 };
 
 export function getState(): State { return state; }
@@ -80,7 +76,6 @@ export function mergeById<T extends { id: string }>(existing: T[], incoming: T[]
   for (const row of incoming) {
     map.set(row.id, { ...(map.get(row.id) as T | undefined), ...row });
   }
-  // Preserve discovery order; append brand-new ids at the end.
   const order = existing.map((x) => x.id);
   for (const row of incoming) {
     if (!order.includes(row.id)) order.push(row.id);
@@ -88,8 +83,19 @@ export function mergeById<T extends { id: string }>(existing: T[], incoming: T[]
   return order.map((id) => map.get(id)!).filter(Boolean);
 }
 
-export function pickDefaultBackend(): string {
-  // Empty string = same-origin. Vite dev server proxies /ws, /agent, /stt, /sweeps to the backend,
-  // so a single tunnel URL (Cloudflare / ngrok / vite-basic-ssl) serves both sides.
+/** Backend base for API + WS. Empty = same origin (Fly serves web + API together). */
+export function apiBase(): string {
+  const fromEnv = (import.meta as any).env?.VITE_BACKEND_URL as string | undefined;
+  if (fromEnv && fromEnv.trim()) return fromEnv.trim().replace(/\/$/, '');
   return '';
+}
+
+export function wsBase(): string {
+  const base = apiBase();
+  if (base) return base.replace(/^http/, 'ws');
+  return window.location.origin.replace(/^http/, 'ws');
+}
+
+export function httpOrigin(): string {
+  return apiBase() || window.location.origin;
 }

@@ -1,0 +1,11 @@
+.venv
+__pycache__
+*.pyc
+.env
+data/sweeps/*
+data/frames/*
+!data/sweeps/.gitkeep
+!data/frames/.gitkeep
+scripts
+*.db
+static/.gitkeep

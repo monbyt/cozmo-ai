@@ -282,6 +282,24 @@ def update_room(sweep_id: str, **fields: Any) -> None:
         conn.close()
 
 
+def delete_book(book_id: str) -> None:
+    conn = connect()
+    try:
+        conn.execute("DELETE FROM book_candidates WHERE id=?", (book_id,))
+        conn.commit()
+    finally:
+        conn.close()
+
+
+def delete_item(item_id: str) -> None:
+    conn = connect()
+    try:
+        conn.execute("DELETE FROM item_candidates WHERE id=?", (item_id,))
+        conn.commit()
+    finally:
+        conn.close()
+
+
 def add_review(sweep_id: str, ref_id: str, reason: str) -> None:
     conn = connect()
     try:
