@@ -147,9 +147,11 @@ function decodeBase64Pcm16(base64: string): Int16Array {
   return new Int16Array(bytes.buffer, bytes.byteOffset, even / 2);
 }
 
-const PLAYBACK_PREBUFFER_SEC = 0.06;
-/** Only cut local agent playback if the user is clearly talking over it. */
-const MIC_BARGE_IN = 0.055;
+/** Wait this long before starting playback so network jitter doesn't punch holes in words. */
+const JITTER_START_SEC = 0.38;
+/** After an underrun, re-buffer before speaking again. */
+const JITTER_REBUFFER_SEC = 0.28;
+const AGENT_SAMPLE_RATE = 24000;
 
 export class LiveClient {
   private ws: WebSocket | null = null;
@@ -161,6 +163,10 @@ export class LiveClient {
   private micGain: GainNode | null = null;
   private playNext = 0;
   private activeSources = new Set<AudioBufferSourceNode>();
+  /** Hold chunks until we have enough buffered — prevents "welcome….in….usd". */
+  private pendingBuffers: AudioBuffer[] = [];
+  private pendingSec = 0;
+  private playbackStarted = false;
   private cameraTimer: number | null = null;
   private onEvent: OnEvent | null = null;
   private cameraEnabled = true;
@@ -253,11 +259,8 @@ export class LiveClient {
     this.lastMicRms = level;
     this.onMicLevel?.(level);
 
-    const ctx = this.audioCtx;
-    // Never cut agent audio unless the user is clearly speaking over it.
-    if (ctx && this.isAgentSpeaking() && level >= MIC_BARGE_IN) {
-      this.stopPlayback();
-    }
+    // Never wipe agent playback from mic energy — that punched holes in sentences.
+    // Gemini uses NO_INTERRUPTION; let the spoken sentence finish.
 
     // CRITICAL: always send, including silence — Gemini auto-VAD needs a continuous stream.
     this.ws.send(JSON.stringify({ type: 'audio', data: pcm16ToBase64(pcm) }));
@@ -410,25 +413,54 @@ export class LiveClient {
     const pcm = decodeBase64Pcm16(base64);
     if (pcm.length === 0) return;
 
-    const buf = ctx.createBuffer(1, pcm.length, 24000);
+    const buf = ctx.createBuffer(1, pcm.length, AGENT_SAMPLE_RATE);
     const ch = buf.getChannelData(0);
     for (let i = 0; i < pcm.length; i++) ch[i] = pcm[i] / 32768;
 
-    const src = ctx.createBufferSource();
-    src.buffer = buf;
-    src.connect(ctx.destination);
+    this.pendingBuffers.push(buf);
+    this.pendingSec += buf.duration;
+    this.totalQueuedSec += buf.duration;
+    this.flushPendingPlayback();
+  }
+
+  /** Schedule buffered PCM on a continuous timeline — no gaps between words. */
+  private flushPendingPlayback(): void {
+    const ctx = this.audioCtx;
+    if (!ctx || this.pendingBuffers.length === 0) return;
 
     const now = ctx.currentTime;
-    const queueEmpty = this.playNext <= now + 0.02;
-    const startAt = queueEmpty
-      ? now + PLAYBACK_PREBUFFER_SEC
-      : Math.max(now, this.playNext);
+    const underrun = this.playNext <= now + 0.04;
 
-    this.activeSources.add(src);
-    src.onended = () => { this.activeSources.delete(src); };
-    src.start(startAt);
-    this.playNext = startAt + buf.duration;
-    this.totalQueuedSec += buf.duration;
+    if (!this.playbackStarted) {
+      if (this.pendingSec < JITTER_START_SEC) return;
+      this.playbackStarted = true;
+      this.playNext = now + 0.05;
+    } else if (underrun) {
+      // Network hiccup: don't resume with a tiny scrap — re-buffer first.
+      if (this.pendingSec < JITTER_REBUFFER_SEC) return;
+      this.playNext = now + 0.05;
+    }
+
+    while (this.pendingBuffers.length > 0) {
+      const buf = this.pendingBuffers.shift()!;
+      this.pendingSec = Math.max(0, this.pendingSec - buf.duration);
+
+      const src = ctx.createBufferSource();
+      src.buffer = buf;
+      src.connect(ctx.destination);
+      const startAt = Math.max(ctx.currentTime + 0.01, this.playNext);
+      this.activeSources.add(src);
+      src.onended = () => {
+        this.activeSources.delete(src);
+        // If everything drained, next speech must re-fill the jitter buffer.
+        if (this.activeSources.size === 0 && this.pendingBuffers.length === 0) {
+          this.playbackStarted = false;
+          this.playNext = 0;
+        }
+      };
+      src.start(startAt);
+      this.playNext = startAt + buf.duration;
+    }
   }
 
   stopPlayback(): void {
@@ -436,6 +468,9 @@ export class LiveClient {
       try { src.stop(); } catch { /* already stopped */ }
     }
     this.activeSources.clear();
+    this.pendingBuffers = [];
+    this.pendingSec = 0;
+    this.playbackStarted = false;
     this.playNext = this.audioCtx?.currentTime ?? 0;
   }
 

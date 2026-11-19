@@ -799,13 +799,44 @@ async def live_ws(ws: WebSocket) -> None:
     storage.insert_sweep(sweep_id, started_at.isoformat(), start.get("device", ""), country, currency)
     cost = CostTracker(sweep_id=sweep_id)
 
-    # Serialize all outbound WS frames so tool/inventory traffic cannot interleave
-    # with PCM chunks and stall the browser playback timeline.
+    # Serialize outbound WS frames. Audio uses a coalescer so the phone gets
+    # fewer, larger PCM blobs (less JSON churn → fewer "welcome….in….usd" gaps).
     send_lock = asyncio.Lock()
+    audio_coalesce: dict[str, Any] = {"buf": bytearray(), "flush_task": None}
 
     async def send(payload: dict[str, Any]) -> None:
         async with send_lock:
             await ws.send_json(payload)
+
+    async def _flush_audio_coalesce() -> None:
+        audio_coalesce["flush_task"] = None
+        raw = bytes(audio_coalesce["buf"])
+        audio_coalesce["buf"].clear()
+        if not raw:
+            return
+        await send({
+            "type": "audio",
+            "data": base64.b64encode(raw).decode(),
+            "mime_type": "audio/pcm;rate=24000",
+        })
+
+    async def send_audio_pcm(data: bytes, _mime: str = "") -> None:
+        """Batch ~120ms of PCM before sending to reduce WS chatter on the phone."""
+        audio_coalesce["buf"].extend(data)
+        # 24kHz mono PCM16 → 48000 bytes/sec; ~120ms ≈ 5760 bytes
+        if len(audio_coalesce["buf"]) >= 5760:
+            t = audio_coalesce.get("flush_task")
+            if t is not None:
+                t.cancel()
+                audio_coalesce["flush_task"] = None
+            await _flush_audio_coalesce()
+        else:
+            t = audio_coalesce.get("flush_task")
+            if t is None or t.done():
+                async def _delayed() -> None:
+                    await asyncio.sleep(0.08)
+                    await _flush_audio_coalesce()
+                audio_coalesce["flush_task"] = asyncio.create_task(_delayed())
 
     await send({"type": "session", "sweep_id": sweep_id, "model": LIVE_MODEL_ID})
 
@@ -1246,15 +1277,22 @@ async def live_ws(ws: WebSocket) -> None:
                         if part.inline_data and part.inline_data.data:
                             mime = part.inline_data.mime_type or ""
                             if mime.startswith("audio/pcm"):
-                                await send({
-                                    "type": "audio",
-                                    "data": base64.b64encode(part.inline_data.data).decode(),
-                                    "mime_type": mime,
-                                })
+                                await send_audio_pcm(part.inline_data.data, mime)
                 # Signal the phone when generation/turn ends so intro can wait for *voice*.
                 if getattr(content, "generation_complete", False):
+                    # Flush any held PCM so the last words aren't stuck in the coalescer.
+                    t = audio_coalesce.get("flush_task")
+                    if t is not None:
+                        t.cancel()
+                        audio_coalesce["flush_task"] = None
+                    await _flush_audio_coalesce()
                     await send({"type": "agent_generation_complete"})
                 if getattr(content, "turn_complete", False):
+                    t = audio_coalesce.get("flush_task")
+                    if t is not None:
+                        t.cancel()
+                        audio_coalesce["flush_task"] = None
+                    await _flush_audio_coalesce()
                     await send({"type": "agent_turn_complete"})
 
     try:

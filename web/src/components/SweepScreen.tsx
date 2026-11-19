@@ -15,27 +15,6 @@ const LOAD_COPY: Record<LoadStep, string> = {
   ready: 'Ready — start sweeping',
 };
 
-/** Gemini may send cumulative OR delta transcript chunks — merge either way. */
-function mergeTranscript(prev: string, chunk: string): string {
-  const next = (chunk || '').trimStart();
-  if (!next) return prev;
-  if (!prev) return next;
-  if (next.startsWith(prev)) return next;
-  if (prev.startsWith(next)) return prev;
-  if (prev.endsWith(next)) return prev;
-  for (let i = Math.min(prev.length, next.length); i > 8; i--) {
-    if (prev.endsWith(next.slice(0, i))) return prev + next.slice(i);
-  }
-  // Separate utterances — start fresh if chunk looks like a new sentence after space gap
-  return prev + next;
-}
-
-function captionTail(text: string, max = 140): string {
-  const t = text.trim();
-  if (t.length <= max) return t;
-  return '…' + t.slice(-max);
-}
-
 export function SweepScreen() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const liveRef = useRef<LiveClient | null>(null);
@@ -49,13 +28,7 @@ export function SweepScreen() {
   const [loadStep, setLoadStep] = useState<LoadStep>('camera');
   const [phase, setPhase] = useState<SweepPhase>('connecting');
   const [error, setError] = useState<string | null>(null);
-  const [agentLine, setAgentLine] = useState('');
-  const [userLine, setUserLine] = useState('');
   const [micLevel, setMicLevel] = useState(0);
-  const agentBuf = useRef('');
-  const userBuf = useRef('');
-  const agentClearTimer = useRef<number | null>(null);
-  const userClearTimer = useRef<number | null>(null);
   const revisitTimer = useRef<number | null>(null);
 
   const books = useAppState((s) => s.books);
@@ -186,41 +159,10 @@ export function SweepScreen() {
         break;
       case 'interrupted':
         // Do NOT cut agent mid-sentence on spurious interrupts.
-        // Local barge-in already handled in mic path when user speaks loudly.
         break;
-      case 'transcript': {
-        if (e.speaker === 'User') {
-          if (userClearTimer.current) {
-            clearTimeout(userClearTimer.current);
-            userClearTimer.current = null;
-          }
-          userBuf.current = mergeTranscript(userBuf.current, e.text);
-          setUserLine(captionTail(userBuf.current, 100));
-          if (e.final) {
-            userClearTimer.current = window.setTimeout(() => {
-              userBuf.current = '';
-              setUserLine('');
-            }, 2500);
-          }
-        } else {
-          if (agentClearTimer.current) {
-            clearTimeout(agentClearTimer.current);
-            agentClearTimer.current = null;
-          }
-          // New agent turn after a cleared buffer, or continuing stream
-          agentBuf.current = mergeTranscript(agentBuf.current, e.text);
-          setAgentLine(captionTail(agentBuf.current, 160));
-          setState({ agentUtterance: e.text });
-          if (e.final) {
-            // Keep the finished line visible — don't wipe mid-voice.
-            agentClearTimer.current = window.setTimeout(() => {
-              agentBuf.current = '';
-              setAgentLine('');
-            }, 4500);
-          }
-        }
+      case 'transcript':
+        // Captions removed — Gemini transcript chunks were garbled on screen.
         break;
-      }
       case 'inventory_update': {
         const incoming = [...(e.new_books || []), ...(e.new_items || [])];
         let isNew = false;
@@ -281,7 +223,6 @@ export function SweepScreen() {
     setPhase('ending');
     setStarting(true);
     setLoadStep('ready');
-    setAgentLine('Building claim packet…');
     // Stop camera immediately; backend finalizes + one summary.
     liveRef.current?.stopCamera();
     liveRef.current?.endSweep();
@@ -294,8 +235,6 @@ export function SweepScreen() {
 
   async function teardown() {
     if (revisitTimer.current) clearTimeout(revisitTimer.current);
-    if (agentClearTimer.current) clearTimeout(agentClearTimer.current);
-    if (userClearTimer.current) clearTimeout(userClearTimer.current);
     try {
       const v = videoRef.current;
       const ms = v?.srcObject as MediaStream | null;
@@ -377,13 +316,6 @@ export function SweepScreen() {
       </div>
 
       {revisitHint && <div className="revisit">{revisitHint}</div>}
-
-      {(agentLine || userLine) && (
-        <div className="caption">
-          {userLine && <div className="caption-user">you · {userLine}</div>}
-          {agentLine && <div className="caption-agent">{agentLine}</div>}
-        </div>
-      )}
 
       <div className={`dock ${tracking ? 'dock-on' : 'dock-dim'}`}>
         <div className="dock-label">{tracking ? 'Live finds' : 'Finds unlock after intro'}</div>
