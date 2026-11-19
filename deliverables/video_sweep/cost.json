@@ -1,0 +1,35 @@
+{
+  "sweep_id": "sw_ccf92291e5",
+  "duration_s": 49.5,
+  "estimated_cost_usd": 0.155,
+  "counts": {
+    "frames_saved": 25,
+    "items_logged": 16,
+    "books_logged": 11,
+    "serpapi_search": 27
+  },
+  "stages_ms": {
+    "tool_log_non_book_item": {
+      "count": 22,
+      "total_ms": 57.3,
+      "median_ms": 2.6
+    },
+    "tool_log_book_spine": {
+      "count": 14,
+      "total_ms": 39.0,
+      "median_ms": 2.8
+    },
+    "tool_record_room_dimensions": {
+      "count": 1,
+      "total_ms": 2.2,
+      "median_ms": 2.2
+    }
+  },
+  "unit_costs_usd": {
+    "gemini_live_minute": 0.02,
+    "gemini_resolve_call": 0.0003,
+    "serpapi_search": 0.005,
+    "openlibrary_lookup": 0.0
+  },
+  "note": "Modelled from call counts \u00d7 unit prices, not invoices."
+}

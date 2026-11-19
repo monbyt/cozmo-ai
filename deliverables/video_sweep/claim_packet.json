@@ -1,0 +1,650 @@
+{
+  "sweep": {
+    "id": "sw_ccf92291e5",
+    "captured_at": "2026-11-19T06:45:15.638347+00:00",
+    "device": "Mozilla/5.0 (iPhone; CPU iPhone OS 26_6_2 like Mac OS X) AppleWebKit/605.1.15 (K",
+    "duration_s": 49.428147,
+    "country": "US",
+    "currency": "USD"
+  },
+  "room": {
+    "length_m": 3.0,
+    "width_m": 2.0,
+    "height_m": 2.4,
+    "floor_area_m2": 6.0,
+    "wall_area_m2": 24.0,
+    "shelved_wall_area_m2": 0.0,
+    "scale_method": "visual_reference_door",
+    "confidence": 0.5,
+    "floor_area_ft2": 64.58,
+    "wall_area_ft2": 258.33,
+    "shape_notes": "rectangular from largest floor plane + vertical wall planes"
+  },
+  "books": [
+    {
+      "id": "bk_efa41955c3",
+      "shelf": "",
+      "position": 0,
+      "frame_ref": "sw_ccf92291e5_f0017",
+      "status": "unidentified",
+      "title": "",
+      "author": "",
+      "edition": "",
+      "isbn": "",
+      "spine_height_cm": 21.0,
+      "spine_thickness_cm": 2.0,
+      "id_confidence": 0.695,
+      "replacement_cost": null,
+      "used_value": null,
+      "rare_flag_reason": ""
+    },
+    {
+      "id": "bk_57af7e8860",
+      "shelf": "",
+      "position": 0,
+      "frame_ref": "sw_ccf92291e5_f0010",
+      "status": "identified",
+      "title": "Hokusai",
+      "author": "Hokusai Katsushika",
+      "edition": "",
+      "isbn": "",
+      "spine_height_cm": 21.0,
+      "spine_thickness_cm": 2.0,
+      "id_confidence": 0.825,
+      "replacement_cost": {
+        "amount": 34.95,
+        "source": "Barnes & Noble",
+        "url": "https://www.google.com/search?ibp=oshop&q=Hokusai Hokusai Katsushika hardcover paperback book&prds=catalogid:17938559736435188145,productid:17069686454008324925,headlineOfferDocid:6508799314762034716,imageDocid:7353606781502883616,rds:PC_12746782721730837818|PROD_PC_12746782721730837818,gpcid:12746782721730837818,mid:576462915706575469,pvt:hg&hl=en&gl=us&udm=28",
+        "retrieved_at": "2026-11-19T06:45:42.990975+00:00",
+        "converted": false,
+        "condition_assumed": "new"
+      },
+      "used_value": {
+        "amount": 29.0,
+        "source": "ThriftBooks.com",
+        "url": "https://www.google.com/search?ibp=oshop&q=Hokusai Hokusai Katsushika used book&prds=catalogid:3141024383597808892,productid:6729117960610615072,headlineOfferDocid:1707623052005772225,imageDocid:1267260091352419648,gpcid:3824264625797296196,mid:576462227114558153,pvt:hg&hl=en&gl=us&udm=28",
+        "retrieved_at": "2026-11-19T06:45:43.015560+00:00",
+        "converted": false,
+        "condition_assumed": "good"
+      },
+      "rare_flag_reason": ""
+    },
+    {
+      "id": "bk_d433e5b53f",
+      "shelf": "",
+      "position": 0,
+      "frame_ref": "sw_ccf92291e5_f0003",
+      "status": "unidentified",
+      "title": "",
+      "author": "",
+      "edition": "",
+      "isbn": "",
+      "spine_height_cm": 21.0,
+      "spine_thickness_cm": 2.0,
+      "id_confidence": 0.608,
+      "replacement_cost": null,
+      "used_value": null,
+      "rare_flag_reason": ""
+    },
+    {
+      "id": "bk_c4d32a760b",
+      "shelf": "",
+      "position": 0,
+      "frame_ref": "sw_ccf92291e5_f0017",
+      "status": "unidentified",
+      "title": "",
+      "author": "",
+      "edition": "",
+      "isbn": "",
+      "spine_height_cm": 21.0,
+      "spine_thickness_cm": 2.0,
+      "id_confidence": 0.354,
+      "replacement_cost": null,
+      "used_value": null,
+      "rare_flag_reason": ""
+    },
+    {
+      "id": "bk_77bca73f6f",
+      "shelf": "",
+      "position": 0,
+      "frame_ref": "sw_ccf92291e5_f0012",
+      "status": "unidentified",
+      "title": "",
+      "author": "",
+      "edition": "",
+      "isbn": "",
+      "spine_height_cm": 21.0,
+      "spine_thickness_cm": 2.0,
+      "id_confidence": 0.468,
+      "replacement_cost": null,
+      "used_value": null,
+      "rare_flag_reason": ""
+    },
+    {
+      "id": "bk_9963d08d19",
+      "shelf": "",
+      "position": 0,
+      "frame_ref": "sw_ccf92291e5_f0003",
+      "status": "identified",
+      "title": "Helvetica",
+      "author": "Lars Müller",
+      "edition": "",
+      "isbn": "",
+      "spine_height_cm": 21.0,
+      "spine_thickness_cm": 2.0,
+      "id_confidence": 0.825,
+      "replacement_cost": {
+        "amount": 25.0,
+        "source": "Barnes & Noble",
+        "url": "https://www.google.com/search?ibp=oshop&q=Helvetica Lars Müller hardcover paperback book&prds=catalogid:7419338734842759732,productid:4169817359024263535,headlineOfferDocid:3444439503342969821,imageDocid:3967200947211349401,rds:PC_2631172921967212928|PROD_PC_2631172921967212928,gpcid:2631172921967212928,mid:576460850000383844,pvt:hg&hl=en&gl=us&udm=28",
+        "retrieved_at": "2026-11-19T06:45:34.758580+00:00",
+        "converted": false,
+        "condition_assumed": "new"
+      },
+      "used_value": {
+        "amount": 28.0,
+        "source": "Etsy - Seller",
+        "url": "https://www.google.com/search?ibp=oshop&q=Helvetica Lars Müller used book&prds=productid:15065830598401108310,headlineOfferDocid:15065830598401108310,imageDocid:3507198584142685450,pvt:hg&hl=en&gl=us&udm=28",
+        "retrieved_at": "2026-11-19T06:45:34.779737+00:00",
+        "converted": false,
+        "condition_assumed": "good"
+      },
+      "rare_flag_reason": ""
+    },
+    {
+      "id": "bk_f534af895b",
+      "shelf": "",
+      "position": 0,
+      "frame_ref": "sw_ccf92291e5_f0023",
+      "status": "identified",
+      "title": "Christian Dior",
+      "author": "Marie France Pochna",
+      "edition": "",
+      "isbn": "",
+      "spine_height_cm": 21.0,
+      "spine_thickness_cm": 2.0,
+      "id_confidence": 0.825,
+      "replacement_cost": {
+        "amount": 47.1,
+        "source": "Better World Books",
+        "url": "https://www.google.com/search?ibp=oshop&q=Christian Dior Marie France Pochna hardcover paperback book&prds=catalogid:10008135771727624181,productid:13418156349634854078,headlineOfferDocid:17020725750342966873,imageDocid:3815540457857318945,pvt:hg&hl=en&gl=us&udm=28",
+        "retrieved_at": "2026-11-19T06:45:58.377558+00:00",
+        "converted": false,
+        "condition_assumed": "new"
+      },
+      "used_value": {
+        "amount": 90.0,
+        "source": "Poshmark",
+        "url": "https://www.google.com/search?ibp=oshop&q=Christian Dior Marie France Pochna used book&prds=productid:12430340768993882942,headlineOfferDocid:12430340768993882942,imageDocid:9838682752899456797,pvt:hg&hl=en&gl=us&udm=28",
+        "retrieved_at": "2026-11-19T06:45:58.403504+00:00",
+        "converted": false,
+        "condition_assumed": "good"
+      },
+      "rare_flag_reason": ""
+    },
+    {
+      "id": "bk_99b98da278",
+      "shelf": "",
+      "position": 0,
+      "frame_ref": "sw_ccf92291e5_f0013",
+      "status": "identified",
+      "title": "Tom Ford",
+      "author": "Graydon Carter",
+      "edition": "",
+      "isbn": "",
+      "spine_height_cm": 21.0,
+      "spine_thickness_cm": 2.0,
+      "id_confidence": 0.825,
+      "replacement_cost": {
+        "amount": 150.0,
+        "source": "Three Trees Books",
+        "url": "https://www.google.com/search?ibp=oshop&q=Tom Ford Graydon Carter hardcover paperback book&prds=catalogid:3508276345800227951,productid:2617371084496787586,headlineOfferDocid:5961161614376171520,imageDocid:4917636328032743345,rds:PC_6301891151066816104|PROD_PC_6301891151066816104,gpcid:6301891151066816104,mid:576460791019613123,pvt:hg&hl=en&gl=us&udm=28",
+        "retrieved_at": "2026-11-19T06:45:45.763078+00:00",
+        "converted": false,
+        "condition_assumed": "new"
+      },
+      "used_value": null,
+      "rare_flag_reason": ""
+    },
+    {
+      "id": "bk_c5648f6ba0",
+      "shelf": "",
+      "position": 0,
+      "frame_ref": "sw_ccf92291e5_f0013",
+      "status": "identified",
+      "title": "Van Gogh",
+      "author": "Federico Zeri",
+      "edition": "",
+      "isbn": "",
+      "spine_height_cm": 21.0,
+      "spine_thickness_cm": 2.0,
+      "id_confidence": 0.825,
+      "replacement_cost": {
+        "amount": 9.61,
+        "source": "Walmart - Alibris Books",
+        "url": "https://www.google.com/search?ibp=oshop&q=Van Gogh Federico Zeri hardcover paperback book&prds=productid:8288293269170199859,headlineOfferDocid:8288293269170199859,imageDocid:14293504322804582151,pvt:hg&hl=en&gl=us&udm=28",
+        "retrieved_at": "2026-11-19T06:45:46.319745+00:00",
+        "converted": false,
+        "condition_assumed": "new"
+      },
+      "used_value": {
+        "amount": 11.04,
+        "source": "eBay - exlibrisusedbooks",
+        "url": "https://www.google.com/search?ibp=oshop&q=Van Gogh Federico Zeri used book&prds=productid:14460157803796917274,headlineOfferDocid:14460157803796917274,imageDocid:13270670887120544120,pvt:hg&hl=en&gl=us&udm=28",
+        "retrieved_at": "2026-11-19T06:45:46.340976+00:00",
+        "converted": false,
+        "condition_assumed": "good"
+      },
+      "rare_flag_reason": ""
+    },
+    {
+      "id": "bk_3b052aca3b",
+      "shelf": "",
+      "position": 0,
+      "frame_ref": "sw_ccf92291e5_f0011",
+      "status": "unidentified",
+      "title": "",
+      "author": "",
+      "edition": "",
+      "isbn": "",
+      "spine_height_cm": 21.0,
+      "spine_thickness_cm": 2.0,
+      "id_confidence": 0.536,
+      "replacement_cost": null,
+      "used_value": null,
+      "rare_flag_reason": ""
+    },
+    {
+      "id": "bk_21b1e0ef38",
+      "shelf": "",
+      "position": 0,
+      "frame_ref": "sw_ccf92291e5_f0017",
+      "status": "unidentified",
+      "title": "",
+      "author": "",
+      "edition": "",
+      "isbn": "",
+      "spine_height_cm": 21.0,
+      "spine_thickness_cm": 2.0,
+      "id_confidence": 0.0,
+      "replacement_cost": null,
+      "used_value": null,
+      "rare_flag_reason": ""
+    }
+  ],
+  "items": [
+    {
+      "id": "it_0321faed3e",
+      "category": "furniture",
+      "description": "light pink upholstered sofa",
+      "brand_model": "",
+      "frame_ref": "sw_ccf92291e5_f0003",
+      "dimensions_cm": {
+        "w": 0.0,
+        "h": 0.0,
+        "d": 0.0
+      },
+      "status": "range",
+      "replacement_cost": {
+        "low": 391.59,
+        "high": 1450.95,
+        "source": "Best Direct Outlet",
+        "url": "https://www.google.com/search?ibp=oshop&q=light pink upholstered sofa&prds=productid:14135056777451294833,headlineOfferDocid:14135056777451294833,imageDocid:13209070700619585807,rds:PC_5867499878596302955|PROD_PC_5867499878596302955,pvt:hg&hl=en&gl=us&udm=28",
+        "retrieved_at": "2026-11-19T06:45:36.008322+00:00"
+      },
+      "confidence": 0.6
+    },
+    {
+      "id": "it_b142342884",
+      "category": "furniture",
+      "description": "small wooden side table with metal frame",
+      "brand_model": "",
+      "frame_ref": "sw_ccf92291e5_f0003",
+      "dimensions_cm": {
+        "w": 0.0,
+        "h": 0.0,
+        "d": 0.0
+      },
+      "status": "range",
+      "replacement_cost": {
+        "low": 30.0,
+        "high": 176.18,
+        "source": "Target",
+        "url": "https://www.google.com/search?ibp=oshop&q=small wooden side table with metal frame&prds=catalogid:16485589692265762505,productid:3400463920347593445,headlineOfferDocid:2427037063944233138,rds:PC_8461276004845554097|PROD_PC_8461276004845554097,gpcid:8461276004845554097,mid:576462856186316372,pvt:hg&hl=en&gl=us&udm=28",
+        "retrieved_at": "2026-11-19T06:45:35.311785+00:00"
+      },
+      "confidence": 0.6
+    },
+    {
+      "id": "it_589734ed00",
+      "category": "decor",
+      "description": "green potted plant",
+      "brand_model": "",
+      "frame_ref": "sw_ccf92291e5_f0006",
+      "dimensions_cm": {
+        "w": 0.0,
+        "h": 0.0,
+        "d": 0.0
+      },
+      "status": "range",
+      "replacement_cost": {
+        "low": 13.98,
+        "high": 50.99,
+        "source": "Lowe's",
+        "url": "https://www.google.com/search?ibp=oshop&q=green potted plant&prds=catalogid:15856137483132778124,productid:7348320025202869765,headlineOfferDocid:11188904103393691710,imageDocid:15574564985360926344,rds:PC_8752903760422100687|PROD_PC_8752903760422100687,gpcid:8752903760422100687,mid:576462551034545637,pvt:hg&hl=en&gl=us&udm=28",
+        "retrieved_at": "2026-11-19T06:45:44.279072+00:00"
+      },
+      "confidence": 0.6
+    },
+    {
+      "id": "it_c3a57249e6",
+      "category": "shelving",
+      "description": "wooden floating shelf with integrated LED lighting",
+      "brand_model": "",
+      "frame_ref": "sw_ccf92291e5_f0007",
+      "dimensions_cm": {
+        "w": 0.0,
+        "h": 0.0,
+        "d": 0.0
+      },
+      "status": "range",
+      "replacement_cost": {
+        "low": 114.37,
+        "high": 199.98,
+        "source": "J Thomas Home",
+        "url": "https://www.google.com/search?ibp=oshop&q=wooden floating shelf with integrated LED lighting&prds=catalogid:5006039132022765946,productid:7546623847513989598,headlineOfferDocid:6477429582030587776,imageDocid:16467820689814677005,gpcid:807680707491017142,mid:576462916030003067,pvt:hg&hl=en&gl=us&udm=28",
+        "retrieved_at": "2026-11-19T06:45:39.869392+00:00"
+      },
+      "confidence": 0.6
+    },
+    {
+      "id": "it_de57bde332",
+      "category": "rug",
+      "description": "circular patterned rug",
+      "brand_model": "",
+      "frame_ref": "sw_ccf92291e5_f0007",
+      "dimensions_cm": {
+        "w": 120.0,
+        "h": 0.0,
+        "d": 120.0
+      },
+      "status": "range",
+      "replacement_cost": {
+        "low": 79.0,
+        "high": 20900.0,
+        "source": "One Kings Lane",
+        "url": "https://www.google.com/search?ibp=oshop&q=circular patterned rug&prds=productid:5525440144316089774,headlineOfferDocid:5525440144316089774,imageDocid:13535862760646180649,rds:PC_2318977571321632095|PROD_PC_2318977571321632095,pvt:hg&hl=en&gl=us&udm=28",
+        "retrieved_at": "2026-11-19T06:45:46.581885+00:00"
+      },
+      "confidence": 0.6
+    },
+    {
+      "id": "it_bf2da76d43",
+      "category": "furniture",
+      "description": "camera tripod stand",
+      "brand_model": "",
+      "frame_ref": "sw_ccf92291e5_f0010",
+      "dimensions_cm": {
+        "w": 0.0,
+        "h": 0.0,
+        "d": 0.0
+      },
+      "status": "range",
+      "replacement_cost": {
+        "low": 23.99,
+        "high": 141.48,
+        "source": "B&H Photo-Video-Audio",
+        "url": "https://www.google.com/search?ibp=oshop&q=camera tripod stand&prds=catalogid:17498246339778812840,productid:9813750515329791149,headlineOfferDocid:4530539733675827068,imageDocid:17276463581439451742,rds:PC_4740806564312825686|PROD_PC_4740806564312825686,gpcid:9679360728768680530,pvt:hg&hl=en&gl=us&udm=28",
+        "retrieved_at": "2026-11-19T06:45:43.347714+00:00"
+      },
+      "confidence": 0.6
+    },
+    {
+      "id": "it_b948288fad",
+      "category": "decor",
+      "description": "white textured vase",
+      "brand_model": "",
+      "frame_ref": "sw_ccf92291e5_f0011",
+      "dimensions_cm": {
+        "w": 0.0,
+        "h": 0.0,
+        "d": 0.0
+      },
+      "status": "range",
+      "replacement_cost": {
+        "low": 15.59,
+        "high": 130.0,
+        "source": "Walmart",
+        "url": "https://www.google.com/search?ibp=oshop&q=white textured vase&prds=catalogid:7356795856905912575,productid:8012916391427808314,headlineOfferDocid:17521797985979141814,imageDocid:2077515278539521046,rds:PC_15567972229324760990|PROD_PC_15567972229324760990,gpcid:15567972229324760990,mid:576462814369530469,pvt:hg&hl=en&gl=us&udm=28",
+        "retrieved_at": "2026-11-19T06:45:45.123324+00:00"
+      },
+      "confidence": 0.6
+    },
+    {
+      "id": "it_47ae0c32d2",
+      "category": "decor",
+      "description": "small white decorative vase",
+      "brand_model": "",
+      "frame_ref": "sw_ccf92291e5_f0011",
+      "dimensions_cm": {
+        "w": 0.0,
+        "h": 0.0,
+        "d": 0.0
+      },
+      "status": "range",
+      "replacement_cost": {
+        "low": 5.49,
+        "high": 43.0,
+        "source": "Target",
+        "url": "https://www.google.com/search?ibp=oshop&q=small white decorative vase&prds=catalogid:4631179834824149502,productid:4421311829383268162,headlineOfferDocid:7695380339926716287,rds:PC_12407930636923533728|PROD_PC_12407930636923533728,gpcid:12407930636923533728,mid:576462536403930848,pvt:hg&hl=en&gl=us&udm=28",
+        "retrieved_at": "2026-11-19T06:45:45.983375+00:00"
+      },
+      "confidence": 0.6
+    },
+    {
+      "id": "it_7f272a0cdd",
+      "category": "electronics",
+      "description": "flat screen television mounted on the wall",
+      "brand_model": "",
+      "frame_ref": "sw_ccf92291e5_f0014",
+      "dimensions_cm": {
+        "w": 0.0,
+        "h": 0.0,
+        "d": 0.0
+      },
+      "status": "range",
+      "replacement_cost": {
+        "low": 18.99,
+        "high": 623.48,
+        "source": "Wayfair",
+        "url": "https://www.google.com/search?ibp=oshop&q=flat screen television mounted on the wall&prds=catalogid:2488975486782885073,productid:4654754700764317372,headlineOfferDocid:16744348206745866135,imageDocid:8667439837628309828,rds:PC_1937531022531029296|PROD_PC_1937531022531029296,gpcid:7659975077487131429,mid:576462737767480387,pvt:hg&hl=en&gl=us&udm=28",
+        "retrieved_at": "2026-11-19T06:45:47.265583+00:00"
+      },
+      "confidence": 0.6
+    },
+    {
+      "id": "it_9b470433dc",
+      "category": "decor",
+      "description": "fake bird of paradise plant in a marble-patterned pot",
+      "brand_model": "",
+      "frame_ref": "sw_ccf92291e5_f0014",
+      "dimensions_cm": {
+        "w": 0.0,
+        "h": 0.0,
+        "d": 0.0
+      },
+      "status": "range",
+      "replacement_cost": {
+        "low": 46.99,
+        "high": 229.0,
+        "source": "Walmart - lang de sen",
+        "url": "https://www.google.com/search?ibp=oshop&q=fake bird of paradise plant in a marble-patterned pot&prds=catalogid:16470377461549353705,productid:8996408551683353819,headlineOfferDocid:12758425463702030085,imageDocid:3994899290608297056,rds:PC_16018489380918283298|PROD_PC_16018489380918283298,gpcid:16018489380918283298,mid:576462893119341302,pvt:hg&hl=en&gl=us&udm=28",
+        "retrieved_at": "2026-11-19T06:45:47.980599+00:00"
+      },
+      "confidence": 0.6
+    },
+    {
+      "id": "it_163cfa940f",
+      "category": "decor",
+      "description": "beige throw pillow on the sofa",
+      "brand_model": "",
+      "frame_ref": "sw_ccf92291e5_f0014",
+      "dimensions_cm": {
+        "w": 0.0,
+        "h": 0.0,
+        "d": 0.0
+      },
+      "status": "range",
+      "replacement_cost": {
+        "low": 19.88,
+        "high": 49.99,
+        "source": "Wayfair",
+        "url": "https://www.google.com/search?ibp=oshop&q=beige throw pillow on the sofa&prds=catalogid:16184340326570541819,productid:8082000170993650068,headlineOfferDocid:9233946319604092063,imageDocid:16286993107818804146,rds:PC_18088309403526696530|PROD_PC_18088309403526696530,gpcid:18088309403526696530,mid:576462854343764960,pvt:hg&hl=en&gl=us&udm=28",
+        "retrieved_at": "2026-11-19T06:46:00.269761+00:00"
+      },
+      "confidence": 0.6
+    },
+    {
+      "id": "it_10aa5c5add",
+      "category": "decor",
+      "description": "white ceramic wax warmer",
+      "brand_model": "",
+      "frame_ref": "sw_ccf92291e5_f0017",
+      "dimensions_cm": {
+        "w": 0.0,
+        "h": 0.0,
+        "d": 0.0
+      },
+      "status": "range",
+      "replacement_cost": {
+        "low": 10.23,
+        "high": 69.15,
+        "source": "Target",
+        "url": "https://www.google.com/search?ibp=oshop&q=white ceramic wax warmer&prds=catalogid:231841619221409583,productid:12699058312646882086,headlineOfferDocid:9769699121295774804,imageDocid:1277804993260540796,rds:PC_3458640143873725005|PROD_PC_3458640143873725005,gpcid:16749877449522085717,pvt:hg&hl=en&gl=us&udm=28",
+        "retrieved_at": "2026-11-19T06:45:53.366350+00:00"
+      },
+      "confidence": 0.6
+    },
+    {
+      "id": "it_56a4e96de2",
+      "category": "furniture",
+      "description": "another wooden floating shelf with integrated LED lighting",
+      "brand_model": "",
+      "frame_ref": "sw_ccf92291e5_f0019",
+      "dimensions_cm": {
+        "w": 0.0,
+        "h": 0.0,
+        "d": 0.0
+      },
+      "status": "range",
+      "replacement_cost": {
+        "low": 87.0,
+        "high": 235.0,
+        "source": "WoodArtDeal",
+        "url": "https://www.google.com/search?ibp=oshop&q=another wooden floating shelf with integrated LED lighting&prds=catalogid:13426642626700532876,productid:9870314980833691352,headlineOfferDocid:522073710068455069,imageDocid:3848874969637412151,gpcid:16377493721440365072,mid:576462574796282805,pvt:hg&hl=en&gl=us&udm=28",
+        "retrieved_at": "2026-11-19T06:45:53.846072+00:00"
+      },
+      "confidence": 0.6
+    },
+    {
+      "id": "it_8e63d2284c",
+      "category": "electronics",
+      "description": "TV mounted on the wall",
+      "brand_model": "",
+      "frame_ref": "sw_ccf92291e5_f0023",
+      "dimensions_cm": {
+        "w": 0.0,
+        "h": 0.0,
+        "d": 0.0
+      },
+      "status": "range",
+      "replacement_cost": {
+        "low": 29.99,
+        "high": 369.99,
+        "source": "Home Depot",
+        "url": "https://www.google.com/search?ibp=oshop&q=TV mounted on the wall&prds=catalogid:11692276255564752315,productid:12926120522006487424,headlineOfferDocid:6988499970478516908,imageDocid:17920572526296112580,rds:PC_7659975077487131429|PROD_PC_7659975077487131429,gpcid:7921598471820069620,mid:576462576353316352,pvt:hg&hl=en&gl=us&udm=28",
+        "retrieved_at": "2026-11-19T06:45:59.313505+00:00"
+      },
+      "confidence": 0.6
+    },
+    {
+      "id": "it_53b8681337",
+      "category": "decor",
+      "description": "small decorative candle holder",
+      "brand_model": "",
+      "frame_ref": "sw_ccf92291e5_f0023",
+      "dimensions_cm": {
+        "w": 0.0,
+        "h": 0.0,
+        "d": 0.0
+      },
+      "status": "range",
+      "replacement_cost": {
+        "low": 4.87,
+        "high": 52.95,
+        "source": "Etsy",
+        "url": "https://www.google.com/search?ibp=oshop&q=small decorative candle holder&prds=productid:4967997376048299347,headlineOfferDocid:4967997376048299347,imageDocid:18029655294029422429,pvt:hg&hl=en&gl=us&udm=28",
+        "retrieved_at": "2026-11-19T06:46:00.231217+00:00"
+      },
+      "confidence": 0.6
+    },
+    {
+      "id": "it_1ccce70d8a",
+      "category": "decor",
+      "description": "small remote control",
+      "brand_model": "",
+      "frame_ref": "sw_ccf92291e5_f0024",
+      "dimensions_cm": {
+        "w": 0.0,
+        "h": 0.0,
+        "d": 0.0
+      },
+      "status": "range",
+      "replacement_cost": {
+        "low": 8.99,
+        "high": 19.99,
+        "source": "Dollar General",
+        "url": "https://www.google.com/search?ibp=oshop&q=small remote control&prds=catalogid:17491478084705738162,productid:16223835048252229836,headlineOfferDocid:14480364017858400889,imageDocid:5805676249974446232,rds:PC_4083135553384335538|PROD_PC_4083135553384335538,gpcid:4083135553384335538,mid:576462821138016124,pvt:hg&hl=en&gl=us&udm=28",
+        "retrieved_at": "2026-11-19T06:45:59.854049+00:00"
+      },
+      "confidence": 0.6
+    }
+  ],
+  "totals": {
+    "book_count": 11,
+    "books_identified": 5,
+    "books_unidentified": 6,
+    "shelf_run_m": 0.22,
+    "books_replacement_cost": 266.66,
+    "books_used_value": 158.04,
+    "items_replacement_cost_low": 900.95,
+    "items_replacement_cost_high": 24742.13,
+    "excluded_from_totals": 6
+  },
+  "review_queue": [
+    {
+      "ref_id": "bk_efa41955c3",
+      "reason": "no sourced replacement price"
+    },
+    {
+      "ref_id": "bk_d433e5b53f",
+      "reason": "no sourced replacement price"
+    },
+    {
+      "ref_id": "bk_c4d32a760b",
+      "reason": "no sourced replacement price"
+    },
+    {
+      "ref_id": "bk_77bca73f6f",
+      "reason": "no sourced replacement price"
+    },
+    {
+      "ref_id": "bk_3b052aca3b",
+      "reason": "no sourced replacement price"
+    },
+    {
+      "ref_id": "bk_21b1e0ef38",
+      "reason": "no sourced replacement price"
+    }
+  ]
+}

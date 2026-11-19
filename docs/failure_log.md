@@ -18,16 +18,25 @@ Confirmed live. **Mitigation shipped**: digital-marker filter + median of up to 
 
 ---
 
-## 1. (fill after ground-truth sweep)
+## 1. Fast-walk demo (`sw_ccf92291e5`) — book spines go unidentified; non-books hold
 
 **What broke**  
-_e.g. title ID rate, book count delta, room area miss…_
+On the submission video take the operator walked the room quickly. The agent logged **11** book slots but only **5** with titles (Hokusai, Helvetica, Christian Dior, Tom Ford, Van Gogh). Remembered spines such as a Keith Haring design title and a Nordic-style design book never resolved. Non-book contents (sofa, shelves, rug, plants, TV, decor) were captured throughout the same fast pass.
 
 **Root cause**  
+Live spine OCR needs a stable, closer look. Motion blur + short dwell time leaves `legibility` weak; the pipeline correctly refuses to invent titles → empty `unidentified` rows instead of hallucinations. Item vision (larger objects) tolerates speed much better.
 
 **Measured impact against the pass bar**  
+- Identified/title rate on logged books: 5/11 ≈ **45%** (below the ≥70% legible-ID bar if every blank is treated as a miss).  
+- On the operator’s short list of remembered legible titles ≈ **5/7 (~71%)**.  
+- Non-book find rate: operator reports **≈100%** of visible non-books logged while walking fast (pass ≥80%).  
+- Packet time: **49 s** sweep (pass ≪ 5 min).  
+- Pricing side issue on same packet: circular rug SerpAPI range blew out to **$20,900** high — marketplace outlier still leaking into `items_replacement_cost_high`.
 
 **Fix with two more weeks**  
+- Capture nudge when blur/speed is high: “slow for spines” only, keep silent on furniture.  
+- Multi-frame spine voting before commit.  
+- Hard cap / IQR filter on non-book shopping highs (same spirit as the ebook filter for books).  
 
 ---
 
